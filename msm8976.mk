@@ -90,9 +90,7 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/aanc_tuning_mixer.txt:system/etc/aanc_tuning_mixer.txt \
-    $(LOCAL_PATH)/audio/audio_platform_info.xml:system/etc/audio_platform_info.xml: \
-    $(LOCAL_PATH)/audio/audio_platform_info_extcodec.xml:system/etc/audio_platform_info_extcodec.xml \
-    $(LOCAL_PATH)/audio/audio_policy.conf:system/etc/audio_policy.conf \
+    $(LOCAL_PATH)/audio/audio_policy_configuration.xml:system/etc/audio_policy_configuration.xml \
     $(LOCAL_PATH)/audio/ftm_test_config:system/etc/ftm_test_config \
     $(LOCAL_PATH)/audio/ftm_test_config_msm8952-skum-snd-card:system/etc/ftm_test_config_msm8952-skum-snd-card \
     $(LOCAL_PATH)/audio/ftm_test_config_msm8976-skun-snd-card:system/etc/ftm_test_config_msm8976-skun-snd-card \
@@ -100,10 +98,10 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/ftm_test_config_mtp:system/etc/ftm_test_config_mtp \
     $(LOCAL_PATH)/audio/ftm_test_config_wcd9330:system/etc/ftm_test_config_wcd9330 \
     $(LOCAL_PATH)/audio/ftm_test_config_wcd9335:system/etc/ftm_test_config_wcd9335 \
-    $(LOCAL_PATH)/audio/media_codecs_performance_8956.xml:system/etc/media_codecs_performance_8956.xml \
-    $(LOCAL_PATH)/audio/media_codecs_performance_8956_v1.xml:system/etc/media_codecs_performance_8956_v1.xml \
-    $(LOCAL_PATH)/audio/media_profiles_8956.xml:system/etc/media_profiles_8956.xml \
+    $(LOCAL_PATH)/audio/audio_platform_info.xml:system/etc/audio_platform_info.xml: \
+    $(LOCAL_PATH)/audio/audio_platform_info_extcodec.xml:system/etc/audio_platform_info_extcodec.xml \
     $(LOCAL_PATH)/audio/mixer_paths.xml:system/etc/mixer_paths.xml \
+    $(LOCAL_PATH)/audio/mixer_paths_msm8952_polaris.xml:system/etc/mixer_paths_msm8952_polaris.xml \
     $(LOCAL_PATH)/audio/mixer_paths_mtp.xml:system/etc/mixer_paths_mtp.xml \
     $(LOCAL_PATH)/audio/mixer_paths_qrd_skuh.xml:system/etc/mixer_paths_qrd_skuh.xml \
     $(LOCAL_PATH)/audio/mixer_paths_qrd_skuhf.xml:system/etc/mixer_paths_qrd_skuhf.xml \
@@ -122,7 +120,12 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/sound_trigger_mixer_paths_wcd9335.xml:system/etc/sound_trigger_mixer_paths_wcd9335.xml \
     $(LOCAL_PATH)/audio/sound_trigger_platform_info.xml:system/etc/sound_trigger_platform_info.xml \
     $(LOCAL_PATH)/audio/wfdconfig.xml:system/etc/wfdconfig.xml \
-    $(LOCAL_PATH)/audio/wfdconfigsink.xml:system/etc/wfdconfigsink.xml
+    $(LOCAL_PATH)/audio/wfdconfigsink.xml:system/etc/wfdconfigsink.xml \
+    $(TOPDIR)frameworks/av/services/audiopolicy/config/a2dp_audio_policy_configuration.xml:/system/etc/a2dp_audio_policy_configuration.xml \
+    $(TOPDIR)frameworks/av/services/audiopolicy/config/audio_policy_volumes.xml:/system/etc/audio_policy_volumes.xml \
+    $(TOPDIR)frameworks/av/services/audiopolicy/config/default_volume_tables.xml:/system/etc/default_volume_tables.xml \
+    $(TOPDIR)frameworks/av/services/audiopolicy/config/r_submix_audio_policy_configuration.xml:/system/etc/r_submix_audio_policy_configuration.xml \
+    $(TOPDIR)frameworks/av/services/audiopolicy/config/usb_audio_policy_configuration.xml:/system/etc/usb_audio_policy_configuration.xml
 
 # Camera
 PRODUCT_PACKAGES += \
@@ -142,13 +145,22 @@ PRODUCT_PACKAGES += \
     memtrack.msm8952 \
     liboverlay
 
+# FM
+PRODUCT_PACKAGES += \
+    FM2 \
+    FMRecord \
+    libfmjni \
+    libqcomfm_jni \
+    qcom.fmradio
+
 # For android_filesystem_config.h
 PRODUCT_PACKAGES += \
     fs_config_files
 
 # GPS
+# (gps.default from vendor tree)
 PRODUCT_PACKAGES += \
-    gps.msm8952 \
+    gps.default \
     libcurl
 
 PRODUCT_PACKAGES += \
@@ -177,19 +189,20 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/keylayout/synaptics_dsx.kl:system/usr/keylayout/synaptics_dsx.kl \
     $(LOCAL_PATH)/keylayout/synaptics_rmi4_i2c.kl:system/usr/keylayout/synaptics_rmi4_i2c.kl
 
-# Libshims
-PRODUCT_PACKAGES += \
-    libshims_camera
-
 # Lights
 PRODUCT_PACKAGES += \
     lights.msm8952
 
 # Media
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/media_codecs.xml:system/etc/media_codecs.xml \
-    $(LOCAL_PATH)/configs/media_codecs_performance.xml:system/etc/media_codecs_performance.xml \
-    $(LOCAL_PATH)/configs/media_profiles.xml:system/etc/media_profiles.xml
+    $(LOCAL_PATH)/media/media_codecs.xml:system/etc/media_codecs.xml \
+    $(LOCAL_PATH)/media/media_codecs_8956.xml:system/etc/media_codecs_8956.xml \
+    $(LOCAL_PATH)/media/media_codecs_8956_v1.xml:system/etc/media_codecs_8956_v1.xml \
+    $(LOCAL_PATH)/media/media_codecs_performance.xml:system/etc/media_codecs_performance.xml \
+    $(LOCAL_PATH)/media/media_codecs_performance_8956.xml:system/etc/media_codecs_performance_8956.xml \
+    $(LOCAL_PATH)/media/media_codecs_performance_8956_v1.xml:system/etc/media_codecs_performance_8956_v1.xml \
+    $(LOCAL_PATH)/media/media_profiles.xml:system/etc/media_profiles.xml
+    $(LOCAL_PATH)/media/media_profiles_8956.xml:system/etc/media_profiles_8956.xml
 
 PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
@@ -222,12 +235,20 @@ PRODUCT_PACKAGES += \
 # Ramdisk
 PRODUCT_PACKAGES += \
     fstab.qcom \
+    init.qcom.rc \
     init.qcom.sh \
     init.qcom.bt.sh \
     init.qcom.power.rc \
     init.qcom.usb.rc \
-    init.target.rc \
     ueventd.qcom.rc
+
+# Sensors
+PRODUCT_PACKAGES += \
+    sensors.msm8952
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/sensors/hals.conf:system/etc/sensors/hals.conf \
+    $(LOCAL_PATH)/sensors/sensor_def_qcomdev.conf:system/etc/sensors/sensor_def_qcomdev.conf
 
 # TimeKeep
 PRODUCT_PACKAGES += \
@@ -236,9 +257,8 @@ PRODUCT_PACKAGES += \
 
 # WCNSS
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/wifi/WCNSS_cfg.dat:system/etc/firmware/wlan/qca_cld//WCNSS_cfg.dat \
-    $(LOCAL_PATH)/wifi/WCNSS_qcom_cfg.ini:system/etc/firmware/wlan/qca_cld/WCNSS_qcom_cfg.ini \
-    $(LOCAL_PATH)/wifi/WCNSS_qcom_sdio_cfg.ini:system/etc/wifi/WCNSS_qcom_sdio_cfg.ini
+    $(LOCAL_PATH)/wifi/WCNSS_qcom_sdio_cfg.ini:system/etc/wifi/WCNSS_qcom_sdio_cfg.ini \
+    $(LOCAL_PATH)/wifi/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini
 
 # Wifi
 PRODUCT_PACKAGES += \
@@ -246,6 +266,7 @@ PRODUCT_PACKAGES += \
     libQWiFiSoftApCfg \
     libwpa_client \
     hostapd \
+    wcnss_service \
     wpa_supplicant \
     wpa_supplicant.conf
 

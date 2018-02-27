@@ -43,7 +43,7 @@ static struct light_state_t g_battery;
 static struct light_state_t g_attention;
 
 char const*const LCD_FILE
-        = "/sys/class/leds/lcd-backlight/brightness";
+        = "/sys/class/backlight/lcd-bl/brightness";
 
 char const*const POWER_BLINK_FILE
         = "/sys/class/leds/green/blink";
@@ -133,6 +133,10 @@ set_light_backlight(struct light_device_t* dev,
     pthread_mutex_lock(&g_lock);
     err = write_int(LCD_FILE, brightness);
     pthread_mutex_unlock(&g_lock);
+    if (err < 0) {
+        ALOGD("Writing brightness %d to %s failed with code %d\n",
+              brightness, LCD_FILE, err);
+    }
     return err;
 }
 
@@ -153,25 +157,24 @@ set_speaker_light_locked(struct light_device_t* dev,
                 break;
             case LIGHT_FLASH_NONE:
             default:
-		
                 onS = 0;
                 offS = 0;
                 break;
         }
 
         colorRGB = state->color & 0x00ffffff;
-	    brightness = rgb_to_brightness(state);
+        brightness = rgb_to_brightness(state);
 
-	    if (brightness > 0) {
-	        if (onS == 0 && offS == 0) {
-	            ALOGD("Using brightness: %d\n",brightness);
-	            write_int(POWER_LED_FILE, brightness);
-	        } else {
-	            sprintf(pattern, "2 %d 2 %d",onS,offS);
-	            ALOGD("Using blink pattern: %s\n",pattern);
-	            write_str(POWER_PATTERN_FILE, pattern);
-	            write_int(POWER_BLINK_FILE,1);
-	        }
+        if (brightness > 0) {
+            if (onS == 0 && offS == 0) {
+                ALOGD("Using brightness: %d\n",brightness);
+                write_int(POWER_LED_FILE, brightness);
+            } else {
+                sprintf(pattern, "2 %d 2 %d",onS,offS);
+                ALOGD("Using blink pattern: %s\n",pattern);
+                write_str(POWER_PATTERN_FILE, pattern);
+                write_int(POWER_BLINK_FILE,1);
+            }
         } else {
             write_int(POWER_BLINK_FILE,0);
             write_int(POWER_LED_FILE,0);

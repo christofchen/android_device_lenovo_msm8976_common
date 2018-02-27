@@ -145,14 +145,6 @@ PRODUCT_PACKAGES += \
     memtrack.msm8952 \
     liboverlay
 
-# FM
-PRODUCT_PACKAGES += \
-    FM2 \
-    FMRecord \
-    libfmjni \
-    libqcomfm_jni \
-    qcom.fmradio
-
 # For android_filesystem_config.h
 PRODUCT_PACKAGES += \
     fs_config_files
@@ -269,6 +261,12 @@ PRODUCT_PACKAGES += \
     wcnss_service \
     wpa_supplicant \
     wpa_supplicant.conf
+
+# data-ipa-cfg-mgr
+PRODUCT_PACKAGES += \
+    ipacm \
+    IPACM_cfg.xml \
+    libipanat
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/wifi/hostapd_default.conf:system/etc/hostapd/hostapd_default.conf \
